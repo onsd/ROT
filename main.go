@@ -14,7 +14,7 @@ import (
 func swap(A,B string)(string,string){
 	return B,A
 }
-func Rot(N int, plain string, flag *bool) (string, error) {
+func Rot(N int, plain string, flag bool) (string, error) {
 	var (
 		upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 		lowerCase  = "abcdefghijklmnopqrstuvwxyz"
@@ -22,7 +22,7 @@ func Rot(N int, plain string, flag *bool) (string, error) {
 		rotedLower = lowerCase[N:] + lowerCase[:N]
 	)
 
-	if *flag {
+	if flag {
 		swap(upperCase,rotedUpper)
 		swap(lowerCase,rotedLower)
 	}
@@ -46,14 +46,18 @@ func Rot(N int, plain string, flag *bool) (string, error) {
 
 func main() {
 	var (
-		intOpt     = flag.Int("n", 13, "help message for i option")
-		decodeFlag = flag.Bool("d", false, "help message for d option")
+		intOpt int
+		decodeFlag bool
 	)
+	flag.IntVar(&intOpt,"n", 13, "help message for i option")
+	flag.BoolVar(&decodeFlag,"decode", false, "help message for d option")
+	flag.BoolVar(&decodeFlag,"d", false, "help message for d option")
 	flag.Parse()
+
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	target := scanner.Text()
-	new, _ := Rot(*intOpt, target, decodeFlag)
+	new, _ := Rot(intOpt, target, decodeFlag)
 	fmt.Println(new)
 
 }
