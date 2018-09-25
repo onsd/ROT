@@ -1,38 +1,54 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"unicode"
+	"strings"
+	"bytes"
+	"bufio"
+	"os"
+	"flag"
+)
 
+const upperCase string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const lowerCase string = "abcdefghijklmnopqrstuvwxyz"
+
+var (
+    intOpt  = flag.Int("n", 13, "help message for i option")
+    strOpt  = flag.String("s", "default", "help message for s option")
+)
 func Rot(N int,plain string) ( string, error){
-	var words string
-	var ascii int
-	for _,v := range plain{
-		num := uint8(v)
-		fmt.Println(num)
-		if num >= 65 && num <= 77{
-			ascii = int(num) + N
-		}else if num >= 78 && num <= 90 {
-			ascii = int(num) - N
-		}else if num >= 97 && num <= 109 {
-			ascii = int(num) + N
-		}else if num >= 110 && num <= 123{
-			ascii = int(num) - N
-		}else{
-			ascii = int(num)
-		}
-		words += string(ascii)
-	}
-	return words,nil
+	 rotedUpper := upperCase[N:] + upperCase[:N]
+	 rotedLower := lowerCase[N:] + lowerCase[:N]
+	 var roted bytes.Buffer
+	 for _,v := range plain {
+		 if unicode.IsLower(v) {
+			 index := strings.Index(lowerCase, string(v))
+			 roted.WriteString(string(rotedLower[index]))
+		 }else if unicode.IsUpper(v){
+		 	index := strings.Index(upperCase,string(v))
+		 	roted.WriteString(string(rotedUpper[index]))
+		 }else{
+		 	roted.WriteString(string(v))
+		 }
+
+	 }
+
+	 return roted.String() , nil
 }
 
+
 func main(){
-	//str := "Hello, World."
-	var str string
+
 	var N int
 	fmt.Println("input the string")
-	fmt.Scan(&str)
+	//fmt.Scan(&str)
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
 	fmt.Println("input rotation number")
 	fmt.Scan(&N)
-	new, _  := Rot(N,str)
+	new, _  := Rot(N,scanner.Text())
 	fmt.Println(new)
 
 }
+
