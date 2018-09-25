@@ -1,6 +1,9 @@
 # ROT
 go製のコマンドラインで動くRot13変換器です
 
+## Install
+`git clone` して `go install` or `go build`
+
 ## option
 `-n N`
 
