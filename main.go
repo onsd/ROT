@@ -5,18 +5,16 @@ import (
 	"unicode"
 	"strings"
 	"bytes"
-	"bufio"
 	"os"
 	"flag"
+	"bufio"
 )
 
 const upperCase string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const lowerCase string = "abcdefghijklmnopqrstuvwxyz"
 
-var (
-    intOpt  = flag.Int("n", 13, "help message for i option")
-    strOpt  = flag.String("s", "default", "help message for s option")
-)
+
+
 func Rot(N int,plain string) ( string, error){
 	 rotedUpper := upperCase[N:] + upperCase[:N]
 	 rotedLower := lowerCase[N:] + lowerCase[:N]
@@ -39,15 +37,14 @@ func Rot(N int,plain string) ( string, error){
 
 
 func main(){
-
-	var N int
-	fmt.Println("input the string")
-	//fmt.Scan(&str)
+	var (
+		intOpt  = flag.Int("n", 13, "help message for i option")
+	)
+	flag.Parse()
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-	fmt.Println("input rotation number")
-	fmt.Scan(&N)
-	new, _  := Rot(N,scanner.Text())
+	target := scanner.Text()
+	new, _  := Rot(*intOpt,target)
 	fmt.Println(new)
 
 }
